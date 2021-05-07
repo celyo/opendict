@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,8 +20,6 @@
 # 02110-1301 USA
 #
 
-#from wx import *
-#import wx.lib.mixins.listctrl as listmix
 import wx
 
 from shutil import rmtree
@@ -68,7 +67,7 @@ class PluginManagerWindow(wx.Frame):
       self.availDictionaries = self.app.cache.get('addons') or {}
       installed = True
 
-      for dictName in self.app.dictionaries.keys():
+      for dictName in list(self.app.dictionaries.keys()):
           self.installedDictionaries[dictName] = installed
 
       tabbedPanel = wx.Notebook(self, -1)
@@ -90,7 +89,7 @@ class PluginManagerWindow(wx.Frame):
       hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
 
       self.buttonClose = wx.Button(self, 163, _("Close"))
-      hboxButtons.Add(self.buttonClose, 0, wx.ALL | wx.ALIGN_RIGHT, 3)
+      hboxButtons.Add(self.buttonClose, 0, wx.ALL, 3)
 
       vboxMain.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 1)
 
@@ -103,9 +102,9 @@ class PluginManagerWindow(wx.Frame):
 
       self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged)
       
-      wx.EVT_BUTTON(self, 161, self.onInstall)
-      wx.EVT_BUTTON(self, 162, self.onRemove)
-      wx.EVT_BUTTON(self, 163, self.onClose)
+      self.Bind(wx.EVT_BUTTON, self.onInstall, id=161)
+      self.Bind(wx.EVT_BUTTON, self.onRemove, id=162)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=163)
 
       self.addons = self.app.cache.get("addons", {})
 
@@ -147,7 +146,7 @@ class PluginManagerWindow(wx.Frame):
        idInstallFile = wx.NewId()
        self.buttonInstallFile = wx.Button(panelInstalled, idInstallFile, 
                                          _("Install From File"))
-       hboxButtons.Add(self.buttonInstallFile, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonInstallFile, 0, wx.ALL, 2)
        
        #
        # "Remove" button
@@ -155,7 +154,7 @@ class PluginManagerWindow(wx.Frame):
        idRemove = wx.NewId()
        self.buttonRemove = wx.Button(panelInstalled, idRemove, _("Remove"))
        self.buttonRemove.Disable()
-       hboxButtons.Add(self.buttonRemove, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonRemove, 0, wx.ALL, 2)
        
        vboxInstalled.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
        
@@ -166,7 +165,7 @@ class PluginManagerWindow(wx.Frame):
        # Make columns
        #
 
-       dictNames = self.installedDictionaries.keys()
+       dictNames = list(self.installedDictionaries.keys())
        dictNames.sort()
        self.setInstalledDicts(dictNames)
 
@@ -206,7 +205,7 @@ class PluginManagerWindow(wx.Frame):
        idUpdate = wx.NewId()
        self.buttonUpdate = wx.Button(panelAvailable, idUpdate,
                                     _("Update List"))
-       hboxButtons.Add(self.buttonUpdate, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonUpdate, 0, wx.ALL, 2)
        
        #
        # "Install" button
@@ -214,7 +213,7 @@ class PluginManagerWindow(wx.Frame):
        idInstall = wx.NewId()
        self.buttonInstall = wx.Button(panelAvailable, idInstall, _("Install"))
        self.buttonInstall.Disable()
-       hboxButtons.Add(self.buttonInstall, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonInstall, 0, wx.ALL, 2)
 
        vboxAvailable.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 1)
        
@@ -231,7 +230,7 @@ class PluginManagerWindow(wx.Frame):
        if not addons:
            addons = {}
        
-       dictNames = addons.keys()
+       dictNames = list(addons.keys())
        dictNames.sort()
        
        for dictionary in dictNames:
@@ -335,7 +334,7 @@ class PluginManagerWindow(wx.Frame):
 
    def _addDictToMenu(self, name):
        dict = None
-       for k, v in self.app.dictionaries.items():
+       for k, v in list(self.app.dictionaries.items()):
            if k == name:
                dict = v
        if dict:
@@ -497,7 +496,7 @@ class PluginManagerWindow(wx.Frame):
 
        self.availableList.DeleteAllItems()
 
-       names = addons.keys()
+       names = list(addons.keys())
        names.sort()
        names.reverse()
 
@@ -552,7 +551,7 @@ class PluginManagerWindow(wx.Frame):
            xmlData += downloader.getBytes()
 
            systemLog(INFO, "Finished downloading list")
-       except Exception, e:
+       except Exception as e:
            traceback.print_exc()
            progressDialog.Destroy()
            error = _("Unable to download list from %s: %s") \
@@ -577,8 +576,8 @@ class PluginManagerWindow(wx.Frame):
 
        self.addons = {}
 
-       for name, obj in allAddons.items():
-           if name in self.app.dictionaries.keys() \
+       for name, obj in list(allAddons.items()):
+           if name in list(self.app.dictionaries.keys()) \
                   and obj.getVersion() <= (\
                self.app.dictionaries.get(name).getVersion() or ""):
                continue
@@ -586,7 +585,7 @@ class PluginManagerWindow(wx.Frame):
            self.addons[name] = obj
 
        app = wx.GetApp()
-       if app.cache.has_key("addons"):
+       if "addons" in app.cache:
            del app.cache["addons"]
        app.cache["addons"] = self.addons
        
@@ -616,7 +615,7 @@ class PluginManagerWindow(wx.Frame):
       inst.showGUI()
 
       dictNames = []
-      for name in self.app.dictionaries.keys():
+      for name in list(self.app.dictionaries.keys()):
           dictNames.append(enc.toWX(name))
       self.setInstalledDicts(dictNames)
 
@@ -639,7 +638,7 @@ class PluginManagerWindow(wx.Frame):
                removeDictionary = installer.removePlainDictionary
 
            removeDictionary(dictInstance)
-       except Exception, e:
+       except Exception as e:
            traceback.print_exc()
            title = _("Unable to remove")
            msg = _("Unable to remove dictionary \"%s\"") % dictName
@@ -649,7 +648,7 @@ class PluginManagerWindow(wx.Frame):
        self.installedList.Delete(self.currentInstalledItemSelection)
 
        idDictMenuItem = None
-       for iid, dictionary in self.app.config.ids.items():
+       for iid, dictionary in list(self.app.config.ids.items()):
            if dictionary == dictName:
                idDictMenuItem = iid
 
@@ -718,11 +717,10 @@ class PluginManagerWindow(wx.Frame):
            if len(bytes):
                fd.write(bytes)
            
-	   progressDialog.Destroy()
-	   downloader.stop()
+           progressDialog.Destroy()
+           downloader.stop()
 
-
-       except Exception, e:
+       except Exception as e:
            traceback.print_exc()
            progressDialog.Destroy()
 
@@ -759,7 +757,7 @@ class PluginManagerWindow(wx.Frame):
        #
        # Remove old version if exists
        #
-       if dictInfo.getName() in self.app.dictionaries.keys():
+       if dictInfo.getName() in list(self.app.dictionaries.keys()):
            try:
                dictInstance = self.app.dictionaries.get(dictInfo.getName())
                if dictInstance.getType() == dicttype.PLUGIN:
@@ -767,7 +765,7 @@ class PluginManagerWindow(wx.Frame):
                else:
                    installer.removePlainDictionary(dictInstance)
 
-           except Exception, e:
+           except Exception as e:
                traceback.print_exc()
                title = _("Error")
                msg = _("Unable to remove old version of \"%s\". "
@@ -793,7 +791,7 @@ class PluginManagerWindow(wx.Frame):
                # FIXME: Code-wasting. Separated duplicated code into
                # functions.
            
-       except Exception, e:
+       except Exception as e:
            traceback.print_exc()
            title = _("Unable to install")
            msg = _("Unable to install dictionary \"%s\".") \

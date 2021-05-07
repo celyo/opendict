@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,10 +59,10 @@ def systemLog(messageType, message):
 
     try:
         fd = open(_systemLogFile, 'a+')
-        print >> fd, dateStr, typeStr, message
+        print(dateStr, typeStr, message, file=fd)
         fd.close()
-    except Exception, e:
-        print "LOGGER ERROR: Unable to write message '%s'" % repr(message)
+    except Exception as e:
+        print("LOGGER ERROR: Unable to write message '%s'" % repr(message))
 
 
 def debugLog(messageType, message):
@@ -80,5 +81,5 @@ def debugLog(messageType, message):
     elif messageType == DEBUG:
         typeStr = 'DEBUG'
 
-    print dateStr, typeStr, message
+    print(dateStr, typeStr, message)
     

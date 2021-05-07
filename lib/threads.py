@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,7 +35,7 @@ class KThread(Thread):
         """Kill it"""
 
         Thread.join(self, timeout)
-        print "Thread killing himself"
+        print("Thread killing himself")
         #os._exit(0)
 
 
@@ -79,8 +80,8 @@ class Process:
            self.__result = func(*param)
         except:
            self.__result = None
-           print string.join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1],
-           sys.exc_info()[2]), "")
+           print("".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1],
+           sys.exc_info()[2])))
         self.__done = 1
         self.__status = "self.__result"
         self.__C.notify()

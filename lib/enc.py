@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,15 +26,15 @@ Character encodings
 
 import wx
 
-if wx.USE_UNICODE:
-    toWX = fromWX = lambda s: s
-else:
-    import locale
-    localeCharset = locale.getpreferredencoding()
-    
-    def toWX(s):
-        return s.encode(localeCharset, 'replace')
-
-    def fromWX(s):
-        return unicode(s, localeCharset)
-
+# if wx.USE_UNICODE:
+toWX = fromWX = lambda s: s
+#else:
+#    import locale
+#    localeCharset = locale.getpreferredencoding()
+#    
+#    def toWX(s):
+#        return s.encode(localeCharset, 'replace')
+#
+#    def fromWX(s):
+#        return str(s, localeCharset)
+#

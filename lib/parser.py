@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -170,8 +171,8 @@ class SlowoParser(plaindict.PlainDictionary):
       #
       # Seek to the beginning of the block
       #
-      position = 0L
-      if word_lowered[:2] in encodedIndex.keys():
+      position = 0
+      if word_lowered[:2] in list(encodedIndex.keys()):
          position = encodedIndex[word_lowered[:2]]
 
       debugLog(DEBUG, "Index: %s->%d" % (word_lowered[:2], position))
@@ -195,7 +196,7 @@ class SlowoParser(plaindict.PlainDictionary):
       # DEBUG
       _linesRead = 0
 
-      for line in self.fd.xreadlines():
+      for line in self.fd:
          _linesRead += 1
          line = line.strip()
          try:
@@ -203,7 +204,7 @@ class SlowoParser(plaindict.PlainDictionary):
             end = ""
             try:
                 orig, end = line.split('=', 1)
-            except ValueError, e:
+            except ValueError as e:
                 systemLog(ERROR, '%s (line %s)' % (e, line))
             orig = orig.strip()
             chunks = end.split(';')
@@ -417,8 +418,8 @@ class MovaParser(plaindict.PlainDictionary):
       #
       # Seek to the beginning of the block
       #
-      position = 0L
-      if word_lowered[:2] in encodedIndex.keys():
+      position = 0
+      if word_lowered[:2] in list(encodedIndex.keys()):
          position = encodedIndex[word_lowered[:2]]
 
       debugLog(DEBUG, "Index: %s->%d" % (word_lowered[:2], position))
@@ -441,7 +442,7 @@ class MovaParser(plaindict.PlainDictionary):
       # DEBUG
       _linesRead = 0
 
-      for line in self.fd.xreadlines():
+      for line in self.fd:
          _linesRead += 1
          line = line.strip()
          try:
@@ -622,7 +623,7 @@ class TMXParser(plaindict.PlainDictionary):
                 #                                    self.window.app.config.fontFace,
                 #                                    self.window.app.config.fontSize)
 
-       keys = self.mapping.keys()
+       keys = list(self.mapping.keys())
        avail = []
        found = False
        word_lowered = word.lower()
@@ -750,7 +751,7 @@ class DictParser(plaindict.PlainDictionary):
       
       for source in translations:
          chunks = source.split('\n')
-         map(string.strip, chunks)
+         list(map(string.strip, chunks))
          
          orig = chunks[0]
          pron = re.findall("\[(.*?)\]", orig)

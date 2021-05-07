@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -88,5 +89,5 @@ class ErrorWindow(wx.Frame):
       self.SetSizer(vbox)
       self.Fit()
 
-      wx.EVT_CLOSE(self, self.onCloseWindow)
-      wx.EVT_BUTTON(self, 200, self.onExit)
+      self.Bind(wx.EVT_CLOSE, self.onCloseWindow)
+      self.Bind(wx.EVT_BUTTON, self.onExit, id=200)

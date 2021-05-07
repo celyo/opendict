@@ -4,6 +4,7 @@
 
 Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+Copyright (c) 2021 Celyo <celyo@mail.bg>
 
 About
 ~~~~~
@@ -15,8 +16,8 @@ universal and easy to use for desktop users and developers.
 Requirements
 ~~~~~~~~~~~~
 
-   - Python >= 2.4
-   - wxPython >= 2.6
+   - Python >= 3.8
+   - wxPython >= 4.1
    - gettext >= 0.14
 
 

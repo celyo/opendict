@@ -1,7 +1,10 @@
 OpenDict Authors
 ================
-Last updated: 2007-06-20
+Last updated: 2021-05-07
 
+o Celyo <celyo@mail.bg> 
+  Maintainer
+  
 o Martynas Jocius <martynas.jocius@idiles.com> 
   Maintainer and main developer
   

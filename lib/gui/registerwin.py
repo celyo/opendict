@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,14 +47,14 @@ class FileRegistryWindow(wx.Frame):
       self.fileList = wx.ListBox(self, 190,
                                 wx.Point(-1, -1),
                                 wx.Size(-1, -1),
-                                self.app.config.registers.keys(),
+                                list(self.app.config.registers.keys()),
                                 wx.LB_SINGLE | wx.SUNKEN_BORDER)
 
       vboxMain.Add(self.fileList, 1, wx.ALL | wx.EXPAND, 1)
 
       vboxInfo = wx.BoxSizer(wx.VERTICAL)
 
-      if len(self.app.config.registers.keys()) > 0:
+      if len(list(self.app.config.registers.keys())) > 0:
          self.fileList.SetSelection(0)
          name = self.fileList.GetStringSelection()
          item = self.app.config.registers[name]
@@ -94,10 +95,10 @@ class FileRegistryWindow(wx.Frame):
       self.SetSizer(vboxMain)
       self.Fit()
 
-      wx.EVT_LISTBOX(self, 190, self.onFileSelected)
-      wx.EVT_BUTTON(self, 191, self.onInstall)
-      wx.EVT_BUTTON(self, 192, self.onRemove)
-      wx.EVT_BUTTON(self, 193, self.onClose)
+      self.Bind(wx.EVT_LISTBOX, self.onFileSelected, id=190)
+      self.Bind(wx.EVT_BUTTON, self.onInstall, id=191)
+      self.Bind(wx.EVT_BUTTON, self.onRemove, id=192)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=193)
 
    def onFileSelected(self, event):
       info = self.app.config.registers[event.GetString()]
@@ -141,7 +142,7 @@ class FileRegistryWindow(wx.Frame):
       del self.app.config.ids[item]
       del self.app.config.registers[item]
 
-      for list in self.app.config.groups.values():
+      for list in list(self.app.config.groups.values()):
          if item in list:
             list.remove(item)
 

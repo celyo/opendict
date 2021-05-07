@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -78,9 +79,9 @@ def numVersion(str):
         return 0.0
 
 def printError():
-    print string.join(traceback.format_exception(sys.exc_info()[0],
+    print(string.join(traceback.format_exception(sys.exc_info()[0],
                                                  sys.exc_info()[1],
-                                                 sys.exc_info()[2]), "")
+                                                 sys.exc_info()[2]), ""))
 
 
 def getTraceback():
@@ -98,7 +99,7 @@ def getFileSize(path):
     try:
         size = os.stat(path)[6]
     except:
-        print "ERROR (misc.getFileSize): path '%s' does not exist" % path
+        print("ERROR (misc.getFileSize): path '%s' does not exist" % path)
     
     return size
 
@@ -106,12 +107,12 @@ def getFileSize(path):
 def getDirSize(start, followLinks, myDepth, maxDepth):
     """Return total directory size"""
     
-    total = 0L
+    total = 0
     try:
         dirList = os.listdir(start)
     except:
         if isdir(start):
-            print 'ERROR: Cannot list directory %s' % start
+            print('ERROR: Cannot list directory %s' % start)
         return 0
     
     for item in dirList:
@@ -119,7 +120,7 @@ def getDirSize(start, followLinks, myDepth, maxDepth):
         try:
             stats = os.stat(path)
         except:
-            print 'ERROR: Cannot stat %s' % path
+            print('ERROR: Cannot stat %s' % path)
             continue
         
         total += stats[6]

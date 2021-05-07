@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -71,7 +72,7 @@ class TypePlugin(DictionaryType):
 class TypeSlowo(DictionaryType):
     """Slowo dictionary format"""
 
-    import parser
+    from . import parser
 
     dictClass = parser.SlowoParser
     fileExtentions = ('dwa',)
@@ -83,7 +84,7 @@ class TypeSlowo(DictionaryType):
 class TypeMova(DictionaryType):
     """Mova dictionary format"""
 
-    import parser
+    from . import parser
 
     dictClass = parser.MovaParser
     fileExtentions = ('mova',)
@@ -95,7 +96,7 @@ class TypeMova(DictionaryType):
 class TypeTMX(DictionaryType):
     """TMX dictionary format"""
 
-    import parser
+    from . import parser
 
     dictClass = parser.TMXParser
     fileExtentions = ('tmx',)
@@ -107,7 +108,7 @@ class TypeTMX(DictionaryType):
 class TypeDict(DictionaryType):
     """DICT dictionary type"""
 
-    import parser
+    from . import parser
 
     dictClass = parser.DictParser
     fileExtentions = ('dict', 'dz',)

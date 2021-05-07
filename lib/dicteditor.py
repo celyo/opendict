@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -92,10 +93,10 @@ class Editor:
 
             for line in fd:
                 try:
-                    line = unicode(line, self.encoding)
-                except Exception, e:
-                    raise Exception, "Unable to encode text in %s" \
-                          % self.encoding
+                    line = str(line, self.encoding)
+                except Exception as e:
+                    raise Exception("Unable to encode text in %s" \
+                          % self.encoding)
                 
                 word, end = line.split('=')
                 word = word.strip()
@@ -124,8 +125,8 @@ class Editor:
 
             fd.close()
 
-        except Exception, e:
-            raise Exception, "Unable to read dictionary: %s" % e
+        except Exception as e:
+            raise Exception("Unable to read dictionary: %s" % e)
 
 
     def save(self, filePath=None):
@@ -141,16 +142,16 @@ class Editor:
                 outstr = "%s = " % unit.getWord()
                 chunks = []
 
-                for trans, comment in unit.getTranslations().items():
+                for trans, comment in list(unit.getTranslations().items()):
                     if comment:
                         chunks.append("%s // %s" % (trans, comment))
                     else:
                         chunks.append(trans)
-                outstr += u' ; '.join(chunks) + u' ;'
+                outstr += ' ; '.join(chunks) + ' ;'
                 outstr = outstr.encode(self.encoding)
-                print >> fd, outstr
-        except Exception, e:
-            raise Exception, "Unable to save dictionary: %s" % e
+                print(outstr, file=fd)
+        except Exception as e:
+            raise Exception("Unable to save dictionary: %s" % e)
 
 
     def getUnit(self, word):

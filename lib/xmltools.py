@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -219,7 +220,7 @@ class IndexFileGenerator:
         indexElement = doc.createElement("index")
         doc.appendChild(indexElement)
 
-        for data, pos in index.items():
+        for data, pos in list(index.items()):
             startElement = doc.createElement("element")
             startElement.setAttribute("literal", data)
             startElement.setAttribute("position", str(pos))
@@ -260,7 +261,7 @@ class IndexFileParser:
         indexElement = doc.getElementsByTagName('index')[0]
 
         for element in indexElement.getElementsByTagName('element'):
-            index[element.getAttribute("literal")] = long(element.getAttribute("position"))
+            index[element.getAttribute("literal")] = int(element.getAttribute("position"))
 
         return index
 
@@ -408,7 +409,7 @@ class AddOnsParser:
                 url = _textData(urlElement)
 
             for sizeElement in addonElement.getElementsByTagName('size'):
-                size = long(_textData(sizeElement))
+                size = int(_textData(sizeElement))
                 
             for sumElement in addonElement.getElementsByTagName('md5'):
                 checksum = _textData(sumElement)
@@ -490,10 +491,10 @@ class MainConfigGenerator:
         mainElement = doc.createElement("main-config")
         doc.appendChild(mainElement)
 
-        for key, value in props.items():
+        for key, value in list(props.items()):
             elem = doc.createElement(key)
             mainElement.appendChild(elem)
-            if type(value) != unicode:
+            if type(value) != str:
                 value = str(value)
             elem.appendChild(doc.createTextNode(value))
 

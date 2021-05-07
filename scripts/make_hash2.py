@@ -7,13 +7,13 @@
 import sys
 
 if len(sys.argv) < 3:
-    print "Usage: %s <dict_file> <hash_file>" % sys.argv[0]
+    print("Usage: %s <dict_file> <hash_file>" % sys.argv[0])
     sys.exit(1)
 
 fdDict = open(sys.argv[1])
 fdHash = open(sys.argv[2], "w")
  
-print "Indexing..."
+print("Indexing...")
 
 hash = {}
 
@@ -26,11 +26,11 @@ n += len(line)
 
 for line in fdDict.readlines():
     l = line[0:2].lower()
-    if not hash.has_key(l):
+    if l not in hash:
         hash[l] = n
     n += len(line)
 
-for l, p in hash.items():
+for l, p in list(hash.items()):
     fdHash.write("%s %s\n" % (l, p))
 
 fdDict.close()

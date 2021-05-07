@@ -1,6 +1,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,9 +55,9 @@ class ActiveDictConfig(object):
         try:
             for line in open(self.filePath):
                 name = line.strip()
-                name = unicode(name, 'UTF-8')
+                name = str(name, 'UTF-8')
                 self.dicts.append(name)
-        except IOError, e:
+        except IOError as e:
             pass
 
 
@@ -66,7 +67,7 @@ class ActiveDictConfig(object):
         fd = open(self.filePath, 'w')
         for d in self.dicts:
             name = d.encode('UTF-8')
-            print >> fd, name
+            print(name, file=fd)
         fd.close()
 
 
@@ -83,7 +84,7 @@ class ActiveDictConfig(object):
         """Add new dictionary to the list."""
 
         if type(name) == str:
-            name = unicode(name, 'UTF-8')
+            name = str(name, 'UTF-8')
 
         if not name in self.dicts:
             self.dicts.append(name)
@@ -93,7 +94,7 @@ class ActiveDictConfig(object):
         """Remove dictionary from the list."""
 
         if type(name) == str:
-            name = unicode(name, 'UTF-8')
+            name = str(name, 'UTF-8')
 
         if name in self.dicts:
             self.dicts.remove(name)
@@ -170,7 +171,7 @@ class Configuration:
       try:
          if os.path.exists(self.filePath):
             self.props.update(xmltools.parseMainConfig(self.filePath))
-      except Exception, e:
+      except Exception as e:
          systemLog(ERROR, "Unable to read configuration file: %s" % e)
 
       # Old configurations may still keep outdated entry, rewrite it

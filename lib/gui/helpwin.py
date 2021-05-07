@@ -1,8 +1,8 @@
-# -*- coding: UTF-8 -*-
-
+#
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 #
 # Module: gui.helpwin
 
-#from wx import *
-#from wx.html import *
 import wx
 import os
 import sys
@@ -50,7 +48,7 @@ class LicenseWindow(wx.Frame):
          fd = open(os.path.join(info.GLOBAL_HOME, 'copying.html'))
          data = fd.read()
          fd.close()
-      except Exception, e:
+      except Exception as e:
          systemLog(ERROR, "Unable to read licence file: %s" % e)
          data = "Error: <i>licence file not found</i>"
 
@@ -58,7 +56,7 @@ class LicenseWindow(wx.Frame):
                                     wx.Size(-1, -1))
 
       htmlWin = wx.html.HtmlWindow(scWinAbout, -1, style=wx.SUNKEN_BORDER)
-      htmlWin.SetFonts('Helvetica', 'Fixed', [10]*5)
+      htmlWin.SetFonts('Helvetica', 'Fixed', [10]*7)
       htmlWin.SetPage(data)
       
       scBox = wx.BoxSizer(wx.VERTICAL)
@@ -71,7 +69,7 @@ class LicenseWindow(wx.Frame):
 
       self.SetSizer(vbox)
 
-      wx.EVT_BUTTON(self, 2002, self.onClose)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=2002)
 
 
    def onClose(self, event):
@@ -94,10 +92,10 @@ class CreditsWindow(wx.Dialog):
       # "Written by" panel
       writePanel = wx.Panel(nb, -1)
       vboxWrite = wx.BoxSizer(wx.VERTICAL)
-      writtenString = unicode("Martynas Jocius <martynas.jocius@idiles.lt>\n"
+      writtenString = str("Martynas Jocius <martynas.jocius@idiles.lt>\n"
                               "Nerijus Baliūnas <nerijusb@dtiltas.lt>\n"
-                              "Mantas Kriaučiūnas <mantas@akl.lt>",
-                              "UTF-8")
+                              "Mantas Kriaučiūnas <mantas@akl.lt>\n"
+                              "Celyo <celyo@mail.bg>")
       written = enc.toWX(writtenString)
       labelWrite = wx.StaticText(writePanel, -1, written)
       vboxWrite.Add(labelWrite, 0, wx.ALL, 10)
@@ -109,8 +107,7 @@ class CreditsWindow(wx.Dialog):
       # "Translations" panel
       tPanel = wx.Panel(nb, -1)
       vboxTP = wx.BoxSizer(wx.VERTICAL)
-      transString = unicode("Martynas Jocius <martynas.jocius@idiles.lt>",
-                            "UTF-8")
+      transString = str("Martynas Jocius <martynas.jocius@idiles.lt>")
       trans = enc.toWX(transString)
       labelTP = wx.StaticText(tPanel, -1, trans)
       vboxTP.Add(labelTP, 0, wx.ALL, 10)
@@ -121,7 +118,7 @@ class CreditsWindow(wx.Dialog):
       # "Thanks" panel
       thPanel = wx.Panel(nb, -1)
       vboxThP = wx.BoxSizer(wx.VERTICAL)
-      thanksString = _("Ports:\n\n") + u"Debian/Ubuntu:\n    Kęstutis Biliūnas <kebil@kaunas.init.lt>\n\nMacOS X:\n    Linas Valiukas <shirshegsm@gmail.com>"
+      thanksString = _("Ports:\n\n") + "Debian/Ubuntu:\n    Kęstutis Biliūnas <kebil@kaunas.init.lt>\n\nMacOS X:\n    Linas Valiukas <shirshegsm@gmail.com>"
       thanks = enc.toWX(thanksString)
       labelThP = wx.StaticText(thPanel, -1, thanks)
       vboxThP.Add(labelThP, 0, wx.ALL, 10)
@@ -147,7 +144,7 @@ class CreditsWindow(wx.Dialog):
       
       self.SetSizer(vbox)
       
-      wx.EVT_BUTTON(self, 2005, self.onClose)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=2005)
 
       
    def onClose(self, event):
@@ -173,9 +170,9 @@ class AboutWindow(wx.Dialog):
       wx.CENTRE, 5)
 
       title = "OpenDict %s" % info.VERSION
-      copy = "Copyright %(c)s 2003-2006 Martynas Jocius <martynas.jocius@idiles.lt>\n" \
-            "Copyright %(c)s 2007-2008 Idiles Systems Ltd <support@idiles.com>" \
-             % {'c': unicode("\302\251", "UTF-8")}
+      copy = "Copyright © 2003-2006 Martynas Jocius <martynas.jocius@idiles.lt>\n" \
+             "Copyright © 2007-2008 Idiles Systems Ltd <support@idiles.com>\n" \
+             "Copyright © 2021 Celyo <celyo@mail.bg>"
       desc = _("OpenDict is a multiplatform dictionary.")
       page = "http://opendict.sf.net\nhttps://github.com/nerijus/opendict"
 
@@ -200,22 +197,22 @@ class AboutWindow(wx.Dialog):
       vbox.Add(wx.StaticLine(self, -1), 0, wx.ALL | wx.EXPAND, 5)
 
       self.buttonCredits = wx.Button(self, 2004, _("C&redits"))
-      hboxButtons.Add(self.buttonCredits, 0, wx.ALL | wx.ALIGN_LEFT, 3)
+      hboxButtons.Add(self.buttonCredits, 0, wx.ALL, 3)
       
       self.buttonLicence = wx.Button(self, 2006, _("&Licence"))
-      hboxButtons.Add(self.buttonLicence, 0, wx.ALL | wx.ALIGN_LEFT, 3)
+      hboxButtons.Add(self.buttonLicence, 0, wx.ALL, 3)
       
       self.buttonOK = wx.Button(self, 2003, _("&Close"))
-      hboxButtons.Add(self.buttonOK, 0, wx.ALL | wx.ALIGN_RIGHT, 3)
+      hboxButtons.Add(self.buttonOK, 0, wx.ALL, 3)
       
       vbox.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_CENTER, 5)
 
       self.SetSizer(vbox)
       vbox.Fit(self)
 
-      wx.EVT_BUTTON(self, 2003, self.onClose)
-      wx.EVT_BUTTON(self, 2004, self.onCredits)
-      wx.EVT_BUTTON(self, 2006, self.onLicence)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=2003)
+      self.Bind(wx.EVT_BUTTON, self.onCredits, id=2004)
+      self.Bind(wx.EVT_BUTTON, self.onLicence, id=2006)
 
 
    def onClose(self, event):

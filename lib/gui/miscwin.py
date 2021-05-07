@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,9 +47,9 @@ class PluginLicenceWindow(wx.Dialog):
       error = False
       
       try:
-          encodedText = enc.toWX(unicode(msg, 'UTF-8'))
+          encodedText = enc.toWX(str(msg, 'UTF-8'))
           htmlWin.SetPage(encodedText)
-      except Exception, e:
+      except Exception as e:
           systemLog(ERROR, "Unable to encode/show licence text: %s" % e)
           htmlWin.SetPage(_("Error: <i>unable to show licence text</i>"))
           error = True
@@ -116,7 +117,7 @@ class InvalidDictWindow(wx.Dialog):
          b = wx.Button(self, rid, _("Remove"))
          self.buttons[rid] = b
          grid.Add(b, 1, wx.ALIGN_CENTER_VERTICAL)
-         wx.EVT_BUTTON(self, rid, self.onRemove)
+         self.Bind(wx.EVT_BUTTON, self.onRemove, id=rid)
 
       vbox.Add(grid, 0, wx.ALL, 10)
       vbox.Add(wx.StaticLine(self, -1), 1, wx.ALL | wx.EXPAND, 1)
@@ -137,7 +138,7 @@ class InvalidDictWindow(wx.Dialog):
       try:
          shutil.rmtree(path)
          self.buttons[event.GetId()].Disable()
-      except Exception, e:
+      except Exception as e:
          traceback.print_exc()
          title = _("Unable to remove")
          msg = _("Unable to remove directory \"%s\": %s") % (path, e)

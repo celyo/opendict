@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +25,7 @@ import os
 import imp
 
 # OpenDict version
-VERSION = "0.6.8"
+VERSION = "0.7"
 
 # File system objects
 __OPENDICT_LOCAL_DIR = ".opendict"

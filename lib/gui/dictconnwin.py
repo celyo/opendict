@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -102,11 +103,11 @@ class DictConnWindow(wx.Frame):
                      row=3, col=0, border=1)
 
       self.entryEncoding = wx.ComboBox(self, 1006,
-                              misc.encodings.keys()[
-                                misc.encodings.values().index(
+                              list(misc.encodings.keys())[
+                                list(misc.encodings.values()).index(
                                     self.app.config.get('dict-server-encoding'))],
                               wx.Point(-1, -1),
-                              wx.Size(-1, -1), misc.encodings.keys(), 
+                              wx.Size(-1, -1), list(misc.encodings.keys()), 
                               wx.CB_DROPDOWN | wx.CB_READONLY)
 
       hboxServer.Add(self.entryEncoding, flag=wx.EXPAND, row=3, col=1, border=1)
@@ -147,14 +148,14 @@ class DictConnWindow(wx.Frame):
       self.update = None
       self.connection = None
 
-      wx.EVT_BUTTON(self, 1000, self.onDefaultServer)
-      wx.EVT_BUTTON(self, 1001, self.onDefaultPort)
-      wx.EVT_BUTTON(self, 1003, self.onUpdateDB)
-      wx.EVT_BUTTON(self, 1007, self.onUpdateStrats)
-      wx.EVT_BUTTON(self, 1004, self.onOK)
-      wx.EVT_BUTTON(self, 1005, self.onCancel)
-      wx.EVT_TIMER(self, 1006, self.onTimerUpdateDB)
-      wx.EVT_TIMER(self, 1007, self.onTimerConnect)
+      self.Bind(wx.EVT_BUTTON, self.onDefaultServer, id=1000)
+      self.Bind(wx.EVT_BUTTON, self.onDefaultPort, id=1001)
+      self.Bind(wx.EVT_BUTTON, self.onUpdateDB, id=1003)
+      self.Bind(wx.EVT_BUTTON, self.onUpdateStrats, id=1007)
+      self.Bind(wx.EVT_BUTTON, self.onOK, id=1004)
+      self.Bind(wx.EVT_BUTTON, self.onCancel, id=1005)
+      self.Bind(wx.EVT_TIMER, self.onTimerUpdateDB, id=1006)
+      self.Bind(wx.EVT_TIMER, self.onTimerConnect, id=1007)
 
 
    def onTimerUpdateDB(self, event):
@@ -169,7 +170,7 @@ class DictConnWindow(wx.Frame):
                self.update = None
                self.choiceDB.Clear()
                self.choiceDB.Append(self.msgSearchInAll)
-               for name in obj.values():
+               for name in list(obj.values()):
                   self.choiceDB.Append(name)
                self.SetStatusText(_("Done"))
                self.choiceDB.SetValue(self.msgSearchInAll)
@@ -226,7 +227,7 @@ class DictConnWindow(wx.Frame):
       conn = dictclient.Connection()
       strats = conn.getstratdescs()
 
-      for name in strats.values():
+      for name in list(strats.values()):
          self.choiceStrat.Append(name)
 
 
@@ -243,8 +244,8 @@ class DictConnWindow(wx.Frame):
       try:
           enc = misc.encodings[encName]
       except KeyError:
-          print 'Error: invalid encoding name "%s", defaulting to UTF-8' % \
-              encName
+          print('Error: invalid encoding name "%s", defaulting to UTF-8' % \
+              encName)
           enc = 'UTF-8'
           
       self.encoding = (enc, encName)
@@ -269,7 +270,7 @@ class DictConnWindow(wx.Frame):
       else:
          try:
             dbs = self.conn.getdbdescs()
-            for d in dbs.keys():
+            for d in list(dbs.keys()):
                if dbs[d] == db:
                   db = d
             db_name = dbs[db]

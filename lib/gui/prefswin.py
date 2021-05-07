@@ -2,6 +2,7 @@
 # OpenDict
 # Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
 # Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+# Copyright (c) 2021 Celyo <celyo@mail.bg>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,15 +50,15 @@ class PrefsWindow(wx.Dialog):
                    0, wx.ALIGN_CENTER_VERTICAL)
 
       dictNames = []
-      for name, d in self.app.dictionaries.items():
+      for name, d in list(self.app.dictionaries.items()):
           if d.getActive():
               dictNames.append(name)
       dictNames.sort()
       dictNames.insert(0, "")
 
       try:
-         map(enc.toWX, dictNames)
-      except Exception, e:
+         list(map(enc.toWX, dictNames))
+      except Exception as e:
          systemLog(ERROR, "Unable to decode titles to UTF-8 (%s)" % e)
       
       self.dictChooser = wx.ComboBox(self, 1100,
@@ -69,9 +70,9 @@ class PrefsWindow(wx.Dialog):
       grid.Add(wx.StaticText(self, -1, _("Default encoding: ")),
                0, wx.ALIGN_CENTER_VERTICAL)
       self.encChooser = wx.ComboBox(self, 1108,
-                                  encodings.keys()[encodings.values().index(self.app.config.get('encoding'))],
+                                  list(encodings.keys())[list(encodings.values()).index(self.app.config.get('encoding'))],
                                   wx.Point(-1, -1),
-                                  wx.Size(-1, -1), encodings.keys(),
+                                  wx.Size(-1, -1), list(encodings.keys()),
                                   wx.TE_READONLY)
       grid.Add(self.encChooser, 0, wx.EXPAND | wx.ALIGN_RIGHT)
       
@@ -158,12 +159,12 @@ class PrefsWindow(wx.Dialog):
       self.Fit()
       self.SetSize((400, -1))
 
-      wx.EVT_CHECKBOX(self, 1101, self.onSaveWinSizeClicked)
-      wx.EVT_CHECKBOX(self, 1102, self.onSaveWinPosClicked)
-      wx.EVT_CHECKBOX(self, 1103, self.onSaveSashPosClicked)
-      wx.EVT_BUTTON(self, 1106, self.onDefaultPron)
-      wx.EVT_BUTTON(self, 1104, self.onOK)
-      wx.EVT_BUTTON(self, 1105, self.onCancel)
+      self.Bind(wx.EVT_CHECKBOX, self.onSaveWinSizeClicked, id=1101)
+      self.Bind(wx.EVT_CHECKBOX, self.onSaveWinPosClicked, id=1102)
+      self.Bind(wx.EVT_CHECKBOX, self.onSaveSashPosClicked, id=1103)
+      self.Bind(wx.EVT_BUTTON, self.onDefaultPron, id=1106)
+      self.Bind(wx.EVT_BUTTON, self.onOK, id=1104)
+      self.Bind(wx.EVT_BUTTON, self.onCancel, id=1105)
 
 
    def onSaveWinSizeClicked(self, event):
